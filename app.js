@@ -1,5 +1,6 @@
 // Required Packages
 var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 var mongoose = require("mongoose");
 var express = require("express");
 var app = express();
@@ -7,10 +8,11 @@ var app = express();
 // Connect to DB
 mongoose.connect("mongodb://localhost/simple-blog");
 
-// Uses Express Essentials
+// App Config
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 // build Schema
 var blogSchema = new mongoose.Schema({
@@ -32,7 +34,7 @@ app.get("/", function(req, res){
     res.redirect("/blogs");
 })
 
-// blog Page
+// Index Page
 app.get("/blogs", function(req, res){
     // Get all Blogs from DB
     Blog.find({}, function(err, blogs){
@@ -60,6 +62,39 @@ app.post("/blogs", function(req, res){
             // then redirect to index
             res.redirect("/blogs");
         }
+    });
+});
+
+// Show route
+app.get("/blogs/:id", function(req, res){
+    Blog.findById(req.params.id, function (err, blog){
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("show", {blog: blog});
+        }     
+    });
+});
+
+// Edit route
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function (err, blog){
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("edit", {blog: blog});
+        }     
+    });
+});
+
+// Update route
+app.put("/blogs/:id", function(req, res){
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, blog){
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs/" + req.params.id);
+        }     
     });
 });
 
