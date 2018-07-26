@@ -1,0 +1,25 @@
+{
+  "name": "blogapp",
+  "version": "1.0.0",
+  "description": "Simple Blog App using Node, Express and Semantic UI without Authentication",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZainKhan2504/SimpleBlog-App.git"
+  },
+  "author": "Zain Ali Khan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZainKhan2504/SimpleBlog-App/issues"
+  },
+  "homepage": "https://github.com/ZainKhan2504/SimpleBlog-App#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.5"
+  }
+}
