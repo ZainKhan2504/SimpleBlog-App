@@ -8,9 +8,9 @@ var app = express();
 mongoose.connect("mongodb://localhost/simple-blog");
 
 // Uses Express Essentials
-app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.set(express.static("public"));
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // build Schema
 var blogSchema = new mongoose.Schema({
@@ -36,14 +36,32 @@ app.get("/", function(req, res){
 app.get("/blogs", function(req, res){
     // Get all Blogs from DB
     Blog.find({}, function(err, blogs){
-       if (err) {
-           console.log("ERROR!");
-           console.log(err);
-       } else {
+      if (err) {
+          console.log("ERROR!");
+          console.log(err);
+      } else {
             res.render("index",{blogs: blogs});
-       } 
+      } 
     });
 })
+
+// new route
+app.get("/blogs/new", function(req, res){
+    res.render("new");
+})
+
+// create route
+app.post("/blogs", function(req, res){
+    // create blog
+    Blog.create(req.body.blog, function (err, blog) {
+        if (err) {
+            res.render("new");
+        } else {
+            // then redirect to index
+            res.redirect("/blogs");
+        }
+    });
+});
 
 // Connect to server
 app.listen(process.env.PORT, process.env.IP, function(){
